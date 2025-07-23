@@ -1,0 +1,38 @@
+# Development Dockerfile for Rails backend
+FROM ruby:3.4.5-slim
+
+# Install dependencies
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    curl \
+    git \
+    libyaml-dev \
+    pkg-config \
+    sqlite3 \
+    libsqlite3-dev \
+    nodejs \
+    npm && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Set working directory
+WORKDIR /rails
+
+# Install bundler
+RUN gem install bundler
+
+# Copy Gemfile and install gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p tmp/pids
+
+# Expose port
+EXPOSE 3000
+
+# Default command
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
