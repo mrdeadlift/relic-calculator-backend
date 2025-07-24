@@ -27,10 +27,10 @@ class Api::V1::RelicsController < Api::V1::BaseController
       page: params[:page]
     )
     
-    render_success(
-      paginated_result[:data].map(&:to_json),
-      message: 'Relics retrieved successfully',
-      meta: paginated_result[:pagination]
+    render_paginated_collection(
+      paginated_result[:data],
+      paginated_result[:pagination],
+      'Relics retrieved successfully'
     )
   end
   
@@ -67,8 +67,10 @@ class Api::V1::RelicsController < Api::V1::BaseController
       }
     )
     
+    serialized_result = CalculationResultSerializer.new(calculation_result).as_json
+    
     render_success(
-      calculation_result,
+      serialized_result,
       message: 'Attack multiplier calculated successfully',
       meta: {
         calculation_context: context,
