@@ -8,6 +8,14 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     namespace :v1 do
+      # API Documentation
+      resources :documentation, only: [:index] do
+        collection do
+          get 'openapi.json', action: :openapi_spec
+          get :postman, action: :postman_collection
+        end
+      end
+      
       # Relic-related routes
       resources :relics, only: [:index, :show] do
         collection do
@@ -24,6 +32,7 @@ Rails.application.routes.draw do
         collection do
           post :suggest
           post :analyze
+          post :compare
           post :meta_builds
           get :cache_stats
           delete :cache, action: :clear_cache
@@ -35,6 +44,7 @@ Rails.application.routes.draw do
       resources :builds do
         member do
           post :clone
+          post :share
           post :calculate, action: :calculate_build
           post :optimize, action: :optimize_build
           post :add_relic
@@ -45,6 +55,21 @@ Rails.application.routes.draw do
         collection do
           get 'shared/:share_key', action: :shared
         end
+      end
+      
+      # Admin routes
+      namespace :admin do
+        # Relic management
+        resources :relics, only: [:create, :update, :destroy] do
+          collection do
+            post :validate, action: :validate_data
+            post :import, action: :import_relics
+            get :export, action: :export_relics
+          end
+        end
+        
+        # System statistics
+        get :statistics
       end
     end
   end

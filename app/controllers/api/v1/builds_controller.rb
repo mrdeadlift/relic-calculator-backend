@@ -1,5 +1,5 @@
 class Api::V1::BuildsController < Api::V1::BaseController
-  before_action :set_build, only: [:show, :update, :destroy, :clone]
+  before_action :set_build, only: [:show, :update, :destroy, :clone, :share, :calculate_build, :optimize_build, :add_relic, :remove_relic, :reorder_relics]
   before_action :validate_build_params, only: [:create, :update]
   
   # GET /api/v1/builds
@@ -328,6 +328,46 @@ class Api::V1::BuildsController < Api::V1::BaseController
     )
   end
   
+  # POST /api/v1/builds/:id/share
+  def share
+    # Check if build is already public and has a share key
+    if @build.is_public? && @build.share_key.present?
+      render_success(
+        {
+          share_key: @build.share_key,
+          share_url: @build.generate_share_url,
+          expires_at: @build.share_expires_at
+        },
+        message: 'Build is already shared'
+      )
+      return
+    end
+    
+    # Generate share key and make build public
+    @build.generate_share_key!
+    @build.update!(is_public: true)
+    
+    # Set expiration (optional, based on params)
+    if params[:expires_in_days].present?
+      days = [params[:expires_in_days].to_i, 365].min # Max 1 year
+      @build.update!(share_expires_at: days.days.from_now) if days > 0
+    end
+    
+    render_success(
+      {
+        share_key: @build.share_key,
+        share_url: @build.generate_share_url,
+        expires_at: @build.share_expires_at,
+        build_snapshot: @build.to_share_format
+      },
+      message: 'Build shared successfully',
+      meta: {
+        share_created_at: Time.current,
+        build_id: @build.id
+      }
+    )
+  end
+
   # GET /api/v1/builds/shared/:share_key
   def shared
     build = Build.find_by_share_key(params[:share_key])

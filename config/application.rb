@@ -47,5 +47,8 @@ module Store
     
     # Rate limiting middleware (basic implementation)
     config.middleware.use Rack::Attack if defined?(Rack::Attack)
+    
+    # API authentication middleware
+    config.middleware.use ApiAuthentication
   end
 end

@@ -133,6 +133,14 @@ class Build < ApplicationRecord
     relics.joins(:relic_effects).where.not(relic_effects: { conditions: [] }).exists?
   end
   
+  def generate_share_key!
+    loop do
+      self.share_key = SecureRandom.urlsafe_base64(12)
+      break unless self.class.exists?(share_key: share_key)
+    end
+    save!
+  end
+
   def generate_share_url(base_url: nil)
     return nil unless share_key.present?
     

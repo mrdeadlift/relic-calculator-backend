@@ -19,38 +19,40 @@ class ApplicationController < ActionController::API
   protected
   
   def render_success(data, message: 'Success', status: :ok, meta: {})
-    response_data = {
-      success: true,
+    response_data = ApiResponseSerializer.success(
+      data,
       message: message,
-      data: data,
+      status: status,
       meta: meta.merge(default_meta)
-    }
+    )
     
     render json: response_data, status: status
   end
   
   def render_error(message, status: :bad_request, error_code: nil, details: {})
-    response_data = {
-      success: false,
-      message: message,
+    response_data = ApiResponseSerializer.error(
+      message,
+      status: status,
       error_code: error_code,
-      details: details,
-      meta: default_meta
-    }
+      details: details
+    )
     
     render json: response_data, status: status
   end
   
   def render_validation_errors(record)
-    render_error(
-      'Validation failed',
-      status: :unprocessable_entity,
-      error_code: 'VALIDATION_ERROR',
-      details: {
-        errors: record.errors.full_messages,
-        field_errors: record.errors.messages
-      }
+    response_data = ApiResponseSerializer.validation_errors(record)
+    render json: response_data, status: :unprocessable_entity
+  end
+  
+  def render_paginated_collection(collection, page_info, message: 'Data retrieved successfully')
+    response_data = ApiResponseSerializer.paginated_collection(
+      collection,
+      page_info,
+      message: message
     )
+    
+    render json: response_data, status: :ok
   end
   
   private
