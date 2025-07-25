@@ -49,6 +49,6 @@ module Store
     config.middleware.use Rack::Attack if defined?(Rack::Attack)
     
     # API authentication middleware
-    config.middleware.use ApiAuthentication
+    # config.middleware.use ApiAuthentication
   end
 end

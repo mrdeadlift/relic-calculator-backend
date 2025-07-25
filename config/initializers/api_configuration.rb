@@ -1,7 +1,7 @@
 # API Configuration
 Rails.application.configure do
-  # JSON parameter handling
-  config.wrap_parameters format: [:json]
+  # JSON parameter handling (for API-only apps, this is handled differently)
+  # config.wrap_parameters format: [:json]
   
   # API versioning
   config.api_version = 'v1'
