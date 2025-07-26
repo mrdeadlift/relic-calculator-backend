@@ -26,10 +26,10 @@ class CalculationService
   end
   
   # Attributes
-  attribute :relic_ids, :string, array: true, default: []
-  attribute :context, :string, default: {}
-  attribute :base_stats, :string, default: {}
-  attribute :options, :string, default: {}
+  attribute :relic_ids, default: -> { [] }
+  attribute :context, default: -> { {} }
+  attribute :base_stats, default: -> { {} }
+  attribute :options, default: -> { {} }
   
   # Constants
   DEFAULT_BASE_ATTACK = 100.0

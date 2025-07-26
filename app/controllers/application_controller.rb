@@ -65,7 +65,7 @@ class ApplicationController < ActionController::API
     return unless Rails.env.development?
     
     Rails.logger.info "API Request: #{request.method} #{request.path}"
-    Rails.logger.info "Parameters: #{filtered_params}" if params.any?
+    Rails.logger.info "Parameters: #{filtered_params}" if filtered_params.present?
   end
   
   def filtered_params

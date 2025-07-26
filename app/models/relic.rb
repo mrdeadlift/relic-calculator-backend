@@ -42,7 +42,7 @@ class Relic < ApplicationRecord
   scope :search, ->(query) { 
     where("name ILIKE ? OR description ILIKE ?", "%#{query}%", "%#{query}%") 
   }
-  scope :excluding, ->(ids) { where.not(id: ids) }
+  scope :excluding_ids, ->(ids) { where.not(id: ids) }
   
   # Ordered scopes
   scope :by_name, -> { order(:name) }

@@ -26,8 +26,8 @@ class RelicValidationService
   end
   
   # Attributes
-  attribute :relic_ids, :string, array: true, default: []
-  attribute :context, :string, default: {}
+  attribute :relic_ids, default: -> { [] }
+  attribute :context, default: -> { {} }
   attribute :strict_mode, :boolean, default: false
   
   # Constants

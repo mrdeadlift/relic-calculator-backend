@@ -30,7 +30,7 @@ class Api::V1::RelicsController < Api::V1::BaseController
     render_paginated_collection(
       paginated_result[:data],
       paginated_result[:pagination],
-      'Relics retrieved successfully'
+      message: 'Relics retrieved successfully'
     )
   end
   

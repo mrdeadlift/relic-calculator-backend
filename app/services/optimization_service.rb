@@ -14,11 +14,11 @@ class OptimizationService
   end
   
   # Attributes
-  attribute :current_relic_ids, :string, array: true, default: []
+  attribute :current_relic_ids, default: -> { [] }
   attribute :combat_style, :string, default: 'melee'
-  attribute :constraints, :string, default: {}
-  attribute :preferences, :string, default: {}
-  attribute :context, :string, default: {}
+  attribute :constraints, default: -> { {} }
+  attribute :preferences, default: -> { {} }
+  attribute :context, default: -> { {} }
   
   # Constants
   MAX_SUGGESTIONS = 5

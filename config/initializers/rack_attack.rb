@@ -47,7 +47,7 @@ class Rack::Attack
   end
   
   # Custom response for throttled requests
-  self.throttled_response = ->(env) {
+  self.throttled_responder = ->(env) {
     retry_after = (env['rack.attack.match_data'] || {})[:period]
     
     [
@@ -75,7 +75,7 @@ class Rack::Attack
   }
   
   # Custom response for blocked requests
-  self.blocklisted_response = ->(env) {
+  self.blocklisted_responder = ->(env) {
     [
       403,
       { 'Content-Type' => 'application/json' },
