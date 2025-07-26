@@ -9,15 +9,15 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       # API Documentation
-      resources :documentation, only: [:index] do
+      resources :documentation, only: [ :index ] do
         collection do
-          get 'openapi.json', action: :openapi_spec
+          get "openapi.json", action: :openapi_spec
           get :postman, action: :postman_collection
         end
       end
-      
+
       # Relic-related routes
-      resources :relics, only: [:index, :show] do
+      resources :relics, only: [ :index, :show ] do
         collection do
           post :calculate
           post :validate
@@ -26,7 +26,7 @@ Rails.application.routes.draw do
           get :rarities
         end
       end
-      
+
       # Optimization routes
       resource :optimization, only: [] do
         collection do
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
           post :batch_calculate
         end
       end
-      
+
       # Build management routes
       resources :builds do
         member do
@@ -48,26 +48,26 @@ Rails.application.routes.draw do
           post :calculate, action: :calculate_build
           post :optimize, action: :optimize_build
           post :add_relic
-          delete 'remove_relic/:relic_id', action: :remove_relic
+          delete "remove_relic/:relic_id", action: :remove_relic
           post :reorder_relics
         end
-        
+
         collection do
-          get 'shared/:share_key', action: :shared
+          get "shared/:share_key", action: :shared
         end
       end
-      
+
       # Admin routes
       namespace :admin do
         # Relic management
-        resources :relics, only: [:create, :update, :destroy] do
+        resources :relics, only: [ :create, :update, :destroy ] do
           collection do
             post :validate, action: :validate_data
             post :import, action: :import_relics
             get :export, action: :export_relics
           end
         end
-        
+
         # System statistics
         get :statistics
       end

@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :build do
     sequence(:name) { |n| "Test Build #{n}" }
     description { Faker::Lorem.paragraph }
-    combat_style { ['melee', 'ranged', 'magic', 'hybrid'].sample }
+    combat_style { [ 'melee', 'ranged', 'magic', 'hybrid' ].sample }
     is_public { false }
     share_key { nil }
 
@@ -29,8 +29,8 @@ FactoryBot.define do
         # Create attack-focused relics
         attack_relics = create_list(:relic, 2, :attack_focused, :with_effects)
         critical_relic = create(:critical_hit_relic)
-        
-        [*attack_relics, critical_relic].each_with_index do |relic, index|
+
+        [ *attack_relics, critical_relic ].each_with_index do |relic, index|
           create(:build_relic, build: build, relic: relic, position: index + 1)
         end
       end
@@ -47,7 +47,7 @@ FactoryBot.define do
           relic.save!
           create(:relic_effect, :elemental_damage, relic: relic)
         end
-        
+
         relics.each_with_index do |relic, index|
           create(:build_relic, build: build, relic: relic, position: index + 1)
         end
@@ -63,8 +63,8 @@ FactoryBot.define do
         attack_relic = create(:relic, :with_effects, category: 'Attack')
         defense_relic = create(:relic, :with_effects, category: 'Defense')
         utility_relic = create(:relic, :with_effects, category: 'Utility')
-        
-        [attack_relic, defense_relic, utility_relic].each_with_index do |relic, index|
+
+        [ attack_relic, defense_relic, utility_relic ].each_with_index do |relic, index|
           create(:build_relic, build: build, relic: relic, position: index + 1)
         end
       end
@@ -81,8 +81,8 @@ FactoryBot.define do
         rare_relic = create(:relic, :rare, :with_effects, category: 'Critical')
         epic_relic = create(:relic, :epic, :with_effects, category: 'Elemental')
         legendary_relic = create(:critical_hit_relic)
-        
-        [common_relic, rare_relic, epic_relic, legendary_relic].each_with_index do |relic, index|
+
+        [ common_relic, rare_relic, epic_relic, legendary_relic ].each_with_index do |relic, index|
           create(:build_relic, build: build, relic: relic, position: index + 1)
         end
       end

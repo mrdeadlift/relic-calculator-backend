@@ -2,11 +2,11 @@ FactoryBot.define do
   factory :relic_effect do
     association :relic
     sequence(:name) { |n| "Effect #{n}" }
-    effect_type { ['attack_multiplier', 'attack_flat', 'critical_chance', 'critical_multiplier'].sample }
+    effect_type { [ 'attack_multiplier', 'attack_flat', 'critical_chance', 'critical_multiplier' ].sample }
     value { rand(1.0..5.0).round(2) }
-    stacking_rule { ['additive', 'multiplicative', 'overwrite', 'unique'].sample }
+    stacking_rule { [ 'additive', 'multiplicative', 'overwrite', 'unique' ].sample }
     description { Faker::Lorem.sentence }
-    damage_types { ['physical'] }
+    damage_types { [ 'physical' ] }
     conditions { [] }
 
     trait :attack_multiplier do
@@ -31,7 +31,7 @@ FactoryBot.define do
       value { rand(5..25) }
       stacking_rule { 'additive' }
       description { 'Increases critical hit chance' }
-      damage_types { ['physical', 'magical'] }
+      damage_types { [ 'physical', 'magical' ] }
     end
 
     trait :critical_multiplier do
@@ -40,7 +40,7 @@ FactoryBot.define do
       value { rand(12..30) }
       stacking_rule { 'additive' }
       description { 'Increases critical hit damage' }
-      damage_types { ['physical', 'magical'] }
+      damage_types { [ 'physical', 'magical' ] }
     end
 
     trait :elemental_damage do
@@ -49,7 +49,7 @@ FactoryBot.define do
       value { rand(10..50) }
       stacking_rule { 'additive' }
       description { 'Adds elemental damage' }
-      damage_types { ['fire', 'ice', 'lightning'] }
+      damage_types { [ 'fire', 'ice', 'lightning' ] }
     end
 
     trait :weapon_specific do
@@ -58,7 +58,7 @@ FactoryBot.define do
       value { rand(5..15) }
       stacking_rule { 'multiplicative' }
       description { 'Bonus damage for specific weapon types' }
-      conditions { [{ type: 'weapon_type', value: 'sword', description: 'Requires sword equipped' }] }
+      conditions { [ { type: 'weapon_type', value: 'sword', description: 'Requires sword equipped' } ] }
     end
 
     trait :conditional_damage do
@@ -67,7 +67,7 @@ FactoryBot.define do
       value { rand(10..25) }
       stacking_rule { 'multiplicative' }
       description { 'Bonus damage under specific conditions' }
-      conditions { [{ type: 'health_threshold', value: 50, description: 'When health is below 50%' }] }
+      conditions { [ { type: 'health_threshold', value: 50, description: 'When health is below 50%' } ] }
     end
 
     trait :physical_damage do
@@ -76,7 +76,7 @@ FactoryBot.define do
       value { 2 }
       stacking_rule { 'additive' }
       description { '+2% physical attack power per level' }
-      damage_types { ['physical'] }
+      damage_types { [ 'physical' ] }
       conditions { [
         {
           type: 'equipment_count',

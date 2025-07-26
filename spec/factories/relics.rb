@@ -2,9 +2,9 @@ FactoryBot.define do
   factory :relic do
     sequence(:name) { |n| "Test Relic #{n}" }
     description { Faker::Lorem.paragraph(sentence_count: 2) }
-    category { ['Attack', 'Defense', 'Utility', 'Critical', 'Elemental'].sample }
-    rarity { ['common', 'rare', 'epic', 'legendary'].sample }
-    quality { ['Delicate', 'Polished', 'Grand'].sample }
+    category { [ 'Attack', 'Defense', 'Utility', 'Critical', 'Elemental' ].sample }
+    rarity { [ 'common', 'rare', 'epic', 'legendary' ].sample }
+    quality { [ 'Delicate', 'Polished', 'Grand' ].sample }
     icon_url { "/icons/test-relic-#{name.downcase.gsub(' ', '-')}.png" }
     obtainment_difficulty { rand(1..10) }
     conflicts { [] }
@@ -42,7 +42,7 @@ FactoryBot.define do
     trait :with_conflicts do
       after(:create) do |relic|
         conflicting_relic = create(:relic)
-        relic.update(conflicts: [conflicting_relic.id])
+        relic.update(conflicts: [ conflicting_relic.id ])
       end
     end
 

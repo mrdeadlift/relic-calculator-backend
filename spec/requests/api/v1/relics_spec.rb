@@ -5,8 +5,8 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
   describe 'GET /api/v1/relics' do
     let!(:relics) { create_list(:relic, 5, :with_effects) }
-    let!(:attack_relic) { create(:relic, category: 'Attack', :with_effects) }
-    let!(:defense_relic) { create(:relic, category: 'Defense', :with_effects) }
+    let!(:attack_relic) { create(:relic, :with_effects, category: 'Attack') }
+    let!(:defense_relic) { create(:relic, :with_effects, category: 'Defense') }
 
     context 'without filters' do
       before { get '/api/v1/relics', headers: headers }
@@ -54,7 +54,7 @@ RSpec.describe 'Api::V1::Relics', type: :request do
     end
 
     context 'with search query' do
-      let!(:sword_relic) { create(:relic, name: 'Ancient Sword Power', :with_effects) }
+      let!(:sword_relic) { create(:relic, :with_effects, name: 'Ancient Sword Power') }
 
       before { get '/api/v1/relics?search=sword', headers: headers }
 
@@ -64,8 +64,8 @@ RSpec.describe 'Api::V1::Relics', type: :request do
     end
 
     context 'with difficulty range' do
-      let!(:easy_relic) { create(:relic, obtainment_difficulty: 2, :with_effects) }
-      let!(:hard_relic) { create(:relic, obtainment_difficulty: 9, :with_effects) }
+      let!(:easy_relic) { create(:relic, :with_effects, obtainment_difficulty: 2) }
+      let!(:hard_relic) { create(:relic, :with_effects, obtainment_difficulty: 9) }
 
       before { get '/api/v1/relics?min_difficulty=1&max_difficulty=5', headers: headers }
 
@@ -150,8 +150,8 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with valid parameters' do
       before do
-        post '/api/v1/relics/calculate', 
-             params: calculation_params.to_json, 
+        post '/api/v1/relics/calculate',
+             params: calculation_params.to_json,
              headers: headers
       end
 
@@ -172,9 +172,9 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with invalid relic IDs' do
       before do
-        invalid_params = calculation_params.merge(selected_relic_ids: ['invalid-id'])
-        post '/api/v1/relics/calculate', 
-             params: invalid_params.to_json, 
+        invalid_params = calculation_params.merge(selected_relic_ids: [ 'invalid-id' ])
+        post '/api/v1/relics/calculate',
+             params: invalid_params.to_json,
              headers: headers
       end
 
@@ -186,8 +186,8 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with missing parameters' do
       before do
-        post '/api/v1/relics/calculate', 
-             params: {}.to_json, 
+        post '/api/v1/relics/calculate',
+             params: {}.to_json,
              headers: headers
       end
 
@@ -199,11 +199,11 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with too many relics' do
       let(:too_many_relics) { create_list(:relic, 15, :with_effects) }
-      
+
       before do
         invalid_params = calculation_params.merge(selected_relic_ids: too_many_relics.map(&:id))
-        post '/api/v1/relics/calculate', 
-             params: invalid_params.to_json, 
+        post '/api/v1/relics/calculate',
+             params: invalid_params.to_json,
              headers: headers
       end
 
@@ -227,8 +227,8 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with valid relic combination' do
       before do
-        post '/api/v1/relics/validate', 
-             params: validation_params.to_json, 
+        post '/api/v1/relics/validate',
+             params: validation_params.to_json,
              headers: headers
       end
 
@@ -249,12 +249,12 @@ RSpec.describe 'Api::V1::Relics', type: :request do
     context 'with conflicting relics' do
       let!(:relic1) { create(:relic, :with_effects) }
       let!(:relic2) { create(:relic, :with_effects) }
-      
+
       before do
-        relic1.update(conflicts: [relic2.id])
-        conflicting_params = validation_params.merge(selected_relic_ids: [relic1.id, relic2.id])
-        post '/api/v1/relics/validate', 
-             params: conflicting_params.to_json, 
+        relic1.update(conflicts: [ relic2.id ])
+        conflicting_params = validation_params.merge(selected_relic_ids: [ relic1.id, relic2.id ])
+        post '/api/v1/relics/validate',
+             params: conflicting_params.to_json,
              headers: headers
       end
 
@@ -277,7 +277,7 @@ RSpec.describe 'Api::V1::Relics', type: :request do
             combat_style: 'melee'
           },
           {
-            name: 'Build B', 
+            name: 'Build B',
             relic_ids: relics2.map(&:id),
             combat_style: 'melee'
           }
@@ -287,8 +287,8 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with valid combinations' do
       before do
-        post '/api/v1/relics/compare', 
-             params: compare_params.to_json, 
+        post '/api/v1/relics/compare',
+             params: compare_params.to_json,
              headers: headers
       end
 
@@ -310,9 +310,9 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with insufficient combinations' do
       before do
-        invalid_params = compare_params.merge(combinations: [compare_params[:combinations].first])
-        post '/api/v1/relics/compare', 
-             params: invalid_params.to_json, 
+        invalid_params = compare_params.merge(combinations: [ compare_params[:combinations].first ])
+        post '/api/v1/relics/compare',
+             params: invalid_params.to_json,
              headers: headers
       end
 
@@ -362,8 +362,8 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
     context 'with invalid JSON' do
       before do
-        post '/api/v1/relics/calculate', 
-             params: 'invalid json', 
+        post '/api/v1/relics/calculate',
+             params: 'invalid json',
              headers: headers
       end
 
@@ -381,7 +381,7 @@ RSpec.describe 'Api::V1::Relics', type: :request do
       # First request
       get "/api/v1/relics/#{relic.id}", headers: headers
       expect(response.headers['X-Cache-Status']).to eq('MISS')
-      
+
       # Second request should be cached
       get "/api/v1/relics/#{relic.id}", headers: headers
       expect(response.headers['X-Cache-Status']).to eq('HIT')
@@ -398,16 +398,16 @@ RSpec.describe 'Api::V1::Relics', type: :request do
 
       # Make requests up to the limit
       20.times do
-        post '/api/v1/relics/calculate', 
-             params: calculation_params.to_json, 
+        post '/api/v1/relics/calculate',
+             params: calculation_params.to_json,
              headers: headers
       end
 
       expect(response).to have_http_status(:ok)
 
       # Next request should be rate limited
-      post '/api/v1/relics/calculate', 
-           params: calculation_params.to_json, 
+      post '/api/v1/relics/calculate',
+           params: calculation_params.to_json,
            headers: headers
 
       expect(response).to have_http_status(:too_many_requests)

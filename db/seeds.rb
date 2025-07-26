@@ -28,7 +28,7 @@ RelicEffect.find_or_create_by!(relic: physical_attack_relic, effect_type: "attac
       description: "Scales with character level"
     }
   ]
-  effect.damage_types = ["physical"]
+  effect.damage_types = [ "physical" ]
   effect.priority = 1
 end
 
@@ -56,7 +56,7 @@ RelicEffect.find_or_create_by!(relic: straight_sword_relic, effect_type: "weapon
       description: "Requires straight sword equipped"
     }
   ]
-  effect.damage_types = ["physical"]
+  effect.damage_types = [ "physical" ]
   effect.priority = 2
 end
 
@@ -84,7 +84,7 @@ RelicEffect.find_or_create_by!(relic: initial_attack_relic, effect_type: "condit
       description: "First attack in combo chain"
     }
   ]
-  effect.damage_types = ["physical"]
+  effect.damage_types = [ "physical" ]
   effect.priority = 3
 end
 
@@ -112,7 +112,7 @@ RelicEffect.find_or_create_by!(relic: weapon_bonus_relic, effect_type: "conditio
       description: "3 or more weapons of same type"
     }
   ]
-  effect.damage_types = ["physical"]
+  effect.damage_types = [ "physical" ]
   effect.priority = 2
 end
 
@@ -140,7 +140,7 @@ RelicEffect.find_or_create_by!(relic: critical_relic, effect_type: "critical_mul
       description: "On critical hits"
     }
   ]
-  effect.damage_types = ["physical", "magical"]
+  effect.damage_types = [ "physical", "magical" ]
   effect.priority = 1
 end
 
@@ -157,7 +157,7 @@ RelicEffect.find_or_create_by!(relic: critical_relic, effect_type: "critical_mul
       description: "On critical hits"
     }
   ]
-  effect.damage_types = ["physical", "magical"]
+  effect.damage_types = [ "physical", "magical" ]
   effect.priority = 2
 end
 
@@ -174,7 +174,7 @@ RelicEffect.find_or_create_by!(relic: critical_relic, effect_type: "critical_mul
       description: "On critical hits"
     }
   ]
-  effect.damage_types = ["physical", "magical"]
+  effect.damage_types = [ "physical", "magical" ]
   effect.priority = 3
 end
 

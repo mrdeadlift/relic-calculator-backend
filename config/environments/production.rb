@@ -87,33 +87,33 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-  
+
   # API-specific production settings
-  config.api_base_url = ENV.fetch('API_BASE_URL', 'https://api.nightreign-calculator.com')
+  config.api_base_url = ENV.fetch("API_BASE_URL", "https://api.nightreign-calculator.com")
   config.detailed_errors = false
   config.include_timing_info = false
   config.log_api_requests = false
-  
+
   # Security settings
-  config.api_key_required = ENV.fetch('API_KEY_REQUIRED', 'false') == 'true'
-  config.allowed_origins = ENV.fetch('ALLOWED_ORIGINS', 'https://nightreign-calculator.com').split(',')
-  
+  config.api_key_required = ENV.fetch("API_KEY_REQUIRED", "false") == "true"
+  config.allowed_origins = ENV.fetch("ALLOWED_ORIGINS", "https://nightreign-calculator.com").split(",")
+
   # Performance settings
   config.calculation_timeout = 5.seconds
   config.optimization_timeout = 10.seconds
   config.cache_expiry = 1.hour
-  
+
   # Redis cache for production (if available)
-  if ENV['REDIS_URL'].present?
+  if ENV["REDIS_URL"].present?
     config.cache_store = :redis_cache_store, {
-      url: ENV['REDIS_URL'],
+      url: ENV["REDIS_URL"],
       expires_in: 1.hour,
-      namespace: 'nightreign_api',
+      namespace: "nightreign_api",
       pool_size: 5,
       pool_timeout: 5
     }
   end
-  
+
   # Enhanced security headers
   config.force_ssl = true
   config.ssl_options = {
@@ -125,31 +125,31 @@ Rails.application.configure do
       preload: true
     }
   }
-  
+
   # Host authorization for API
-  allowed_hosts = ENV.fetch('ALLOWED_HOSTS', config.api_base_url).split(',')
+  allowed_hosts = ENV.fetch("ALLOWED_HOSTS", config.api_base_url).split(",")
   config.hosts = allowed_hosts.map { |host| URI.parse(host).host rescue host }
-  
+
   # Disable detailed error pages
   config.consider_all_requests_local = false
-  
+
   # Enhanced logging for security
-  config.log_tags = [:request_id, :remote_ip]
-  
+  config.log_tags = [ :request_id, :remote_ip ]
+
   # Content Security Policy for API responses
-  config.content_security_policy_nonce_generator = -> request { SecureRandom.base64(16) }
+  config.content_security_policy_nonce_generator = ->(request) { SecureRandom.base64(16) }
   config.content_security_policy_report_only = false
-  
+
   # Database connection pool settings
   config.database_selector = { delay: 2.seconds }
   config.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   config.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
-  
+
   # Active Record encryption (if needed for sensitive data)
   # config.active_record.encryption.key_derivation_salt = Rails.application.credentials.active_record_encryption.key_derivation_salt
   # config.active_record.encryption.primary_key = Rails.application.credentials.active_record_encryption.primary_key
   # config.active_record.encryption.deterministic_key = Rails.application.credentials.active_record_encryption.deterministic_key
-  
+
   # Parameter filtering for logs
   config.filter_parameters += [
     :password, :api_key, :secret, :token, :private_key, :public_key,

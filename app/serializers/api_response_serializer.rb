@@ -1,7 +1,7 @@
 class ApiResponseSerializer
   class << self
     # Serialize a successful response
-    def success(data, message: 'Success', status: :ok, meta: {})
+    def success(data, message: "Success", status: :ok, meta: {})
       {
         success: true,
         message: message,
@@ -9,7 +9,7 @@ class ApiResponseSerializer
         meta: build_meta(meta)
       }
     end
-    
+
     # Serialize an error response
     def error(message, status: :bad_request, error_code: nil, details: {})
       {
@@ -20,9 +20,9 @@ class ApiResponseSerializer
         meta: build_meta({})
       }
     end
-    
+
     # Serialize paginated collection
-    def paginated_collection(collection, page_info, message: 'Data retrieved successfully')
+    def paginated_collection(collection, page_info, message: "Data retrieved successfully")
       {
         success: true,
         message: message,
@@ -30,34 +30,34 @@ class ApiResponseSerializer
         meta: build_meta({ pagination: page_info })
       }
     end
-    
+
     # Serialize validation errors
     def validation_errors(record_or_errors)
       errors = case record_or_errors
-               when ActiveRecord::Base, ActiveModel::Model
+      when ActiveRecord::Base, ActiveModel::Model
                  {
                    errors: record_or_errors.errors.full_messages,
                    field_errors: record_or_errors.errors.messages
                  }
-               when Hash
+      when Hash
                  record_or_errors
-               when Array
+      when Array
                  { errors: record_or_errors }
-               else
-                 { errors: [record_or_errors.to_s] }
-               end
-      
+      else
+                 { errors: [ record_or_errors.to_s ] }
+      end
+
       {
         success: false,
-        message: 'Validation failed',
-        error_code: 'VALIDATION_ERROR',
+        message: "Validation failed",
+        error_code: "VALIDATION_ERROR",
         details: errors,
         meta: build_meta({})
       }
     end
-    
+
     private
-    
+
     def serialize_data(data)
       case data
       when ActiveRecord::Base
@@ -72,31 +72,31 @@ class ApiResponseSerializer
         data
       end
     end
-    
+
     def serialize_model(model)
       case model.class.name
-      when 'Relic'
+      when "Relic"
         RelicSerializer.new(model).as_json
-      when 'Build'
+      when "Build"
         BuildSerializer.new(model).as_json
-      when 'RelicEffect'
+      when "RelicEffect"
         RelicEffectSerializer.new(model).as_json
       else
         model.as_json
       end
     end
-    
+
     def build_meta(additional_meta = {})
       base_meta = {
         timestamp: Time.current.iso8601,
-        version: 'v1'
+        version: "v1"
       }
-      
+
       # Add request ID if available (from controller context)
       if defined?(request) && request.respond_to?(:request_id)
         base_meta[:request_id] = request.request_id
       end
-      
+
       base_meta.merge(additional_meta)
     end
   end
@@ -107,7 +107,7 @@ class RelicSerializer
   def initialize(relic)
     @relic = relic
   end
-  
+
   def as_json(options = {})
     {
       id: @relic.id.to_s,
@@ -129,9 +129,9 @@ class RelicSerializer
       }
     }
   end
-  
+
   private
-  
+
   def serialize_effects
     @relic.relic_effects.active.map do |effect|
       RelicEffectSerializer.new(effect).as_json
@@ -143,7 +143,7 @@ class RelicEffectSerializer
   def initialize(effect)
     @effect = effect
   end
-  
+
   def as_json(options = {})
     {
       id: @effect.id.to_s,
@@ -167,7 +167,7 @@ class BuildSerializer
   def initialize(build)
     @build = build
   end
-  
+
   def as_json(options = {})
     {
       id: @build.id.to_s,
@@ -194,9 +194,9 @@ class BuildSerializer
       }
     }
   end
-  
+
   private
-  
+
   def serialize_build_relics
     @build.build_relics.includes(:relic).order(:position).map do |build_relic|
       {
@@ -218,7 +218,7 @@ class CalculationResultSerializer
   def initialize(result)
     @result = result
   end
-  
+
   def as_json(options = {})
     {
       totalMultiplier: @result[:total_multiplier],
@@ -237,9 +237,9 @@ class CalculationResultSerializer
       }
     }
   end
-  
+
   private
-  
+
   def serialize_stacking_bonuses
     (@result[:stacking_bonuses] || []).map do |bonus|
       {
@@ -253,7 +253,7 @@ class CalculationResultSerializer
       }
     end
   end
-  
+
   def serialize_conditional_effects
     (@result[:conditional_effects] || []).map do |effect|
       {
@@ -267,7 +267,7 @@ class CalculationResultSerializer
       }
     end
   end
-  
+
   def serialize_breakdown
     (@result[:breakdown] || []).map do |step|
       {

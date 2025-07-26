@@ -10,12 +10,12 @@ class CreateRelics < ActiveRecord::Migration[8.0]
       t.integer :obtainment_difficulty, null: false, default: 1
       t.json :conflicts, default: []
       t.boolean :active, default: true
-      
+
       t.timestamps
     end
-    
+
     add_index :relics, :name, unique: true
-    add_index :relics, [:category, :rarity]
+    add_index :relics, [ :category, :rarity ]
     add_index :relics, :obtainment_difficulty
     add_index :relics, :active
   end

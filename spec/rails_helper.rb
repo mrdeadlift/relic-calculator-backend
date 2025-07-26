@@ -89,7 +89,7 @@ RSpec.configure do |config|
     vcr_config.allow_http_connections_when_no_cassette = false
     vcr_config.default_cassette_options = {
       record: :once,
-      match_requests_on: [:method, :uri, :body]
+      match_requests_on: [ :method, :uri, :body ]
     }
   end
 

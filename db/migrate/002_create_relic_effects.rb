@@ -11,11 +11,11 @@ class CreateRelicEffects < ActiveRecord::Migration[8.0]
       t.json :damage_types, default: []
       t.integer :priority, default: 0
       t.boolean :active, default: true
-      
+
       t.timestamps
     end
-    
-    add_index :relic_effects, [:relic_id, :effect_type]
+
+    add_index :relic_effects, [ :relic_id, :effect_type ]
     add_index :relic_effects, :effect_type
     add_index :relic_effects, :stacking_rule
     add_index :relic_effects, :priority

@@ -26,28 +26,28 @@ module Store
 
     # API-only configuration
     config.api_only = true
-    
+
     # CORS configuration
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins '*' # In production, replace with specific origins
-        resource '*',
+        origins "*" # In production, replace with specific origins
+        resource "*",
           headers: :any,
-          methods: [:get, :post, :put, :patch, :delete, :options, :head],
-          expose: ['X-Request-Id', 'X-Runtime']
+          methods: [ :get, :post, :put, :patch, :delete, :options, :head ],
+          expose: [ "X-Request-Id", "X-Runtime" ]
       end
     end
-    
+
     # JSON parameter parsing
     config.middleware.use ActionDispatch::ContentSecurityPolicy::Middleware
     config.force_ssl = false # Set to true in production
-    
+
     # Request ID tracking
-    config.log_tags = [:request_id]
-    
+    config.log_tags = [ :request_id ]
+
     # Rate limiting middleware (basic implementation)
     config.middleware.use Rack::Attack if defined?(Rack::Attack)
-    
+
     # API authentication middleware
     # config.middleware.use ApiAuthentication
   end

@@ -74,7 +74,7 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-  
+
   # Additional RSpec testing gems
   gem "shoulda-matchers", "~> 6.0"
   gem "webmock", "~> 3.19"
